@@ -8,6 +8,7 @@ module.exports = function (grunt) {
   // load all grunt tasks
   require('load-grunt-tasks')(grunt);
 
+
   var reloadPort = 35729, files;
 
   grunt.initConfig({
@@ -40,25 +41,40 @@ module.exports = function (grunt) {
         options: {
           livereload: reloadPort
         }
-      },
+      }
+    },
       jade: {
-        files: ['views/*.jade'],
+        files: ['web_server/views/*.jade'],
         options: {
           livereload: reloadPort
         }
+      },
+      mochaTest: {
+        options: {
+          reporter: 'spec'
+        },
+        src: ['test/**/*.js']
+      },
+      env: {
+        test: {
+          NODE_ENV: 'test'
+        }
       }
-    }
   });
 
   grunt.config.requires('watch.server.files');
   files = grunt.config('watch.server.files');
   files = grunt.file.expand(files);
 
+  grunt.loadNpmTasks('grunt-env');
+  grunt.loadNpmTasks('grunt-mocha-test');
+
   grunt.registerTask('delayed-livereload', 'Live reload after the node server has restarted.', function () {
     var done = this.async();
     setTimeout(function () {
       request.get('http://localhost:' + reloadPort + '/changed?files=' + files.join(','),  function (err, res) {
           var reloaded = !err && res.statusCode === 200;
+
           if (reloaded) {
             grunt.log.ok('Delayed live reload successful.');
           } else {
@@ -70,4 +86,6 @@ module.exports = function (grunt) {
   });
 
   grunt.registerTask('default', ['develop', 'watch']);
+  grunt.registerTask('test', ['env:test', 'mochaTest']);
+
 };
