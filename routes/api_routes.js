@@ -1,6 +1,15 @@
-var ctrl = require('../api_server/controllers/main');
 
 module.exports = function (app) {
-  app.get('/api/', ctrl.index);
+
+  //User Routes
+  var users = require('../api_server/controllers/users');
+  app.get('/api', users.index);
+//  app.get('/signin', users.signin);
+//  app.get('/signup', users.signup);
+//  app.get('/signout', users.signout);
+
+  //Setting up the users api
+  app.post('/users', users.create);
+
 };
 
