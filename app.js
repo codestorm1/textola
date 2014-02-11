@@ -52,7 +52,7 @@ walk(models_path);
 mongoose.connect('mongodb://localhost/textola');
 
 require('./routes/web_routes.js')(app);
-//require('./routes/api_routes.js')(app);
+require('./routes/api_routes.js')(app);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));

@@ -29,6 +29,8 @@ exports.create = function(req, res) {
  * Send User
  */
 exports.me = function(req, res) {
+  res.json({"response" : "hello me"});
+  return;
   res.jsonp(req.user || null);
 };
 
